@@ -7,13 +7,11 @@ const CONFIG = {
   // Your Shopify store URL (without trailing slash)
   shopifyStoreUrl: 'https://modernmeshco.com/',
   
-  // Your Shopify product variant IDs for each size
+  // Your Shopify product variant IDs for each mesh type
   // Find these in Shopify Admin > Products > Your Product > Variants
   variantIds: {
-    '5x5': '42811374272617', // Replace with actual variant ID
-    '8x10': '42811374305385',
-    '12x12': '42811374338153',
-    '14x18': '42811374370921',
+    '14mesh': '42811374272617', // Replace with actual variant ID for 14 mesh
+    '18mesh': '42811374305385', // Replace with actual variant ID for 18 mesh
   },
   
   // Cloudinary settings (UPDATE THESE)
@@ -23,12 +21,10 @@ const CONFIG = {
   },
 };
 
-// Canvas size options with pricing
+// Canvas size options with pricing (14 mesh and 18 mesh only)
 const CANVAS_SIZES = {
-  '5x5': { width: 5, height: 5, name: 'Mini', dimensions: '5" × 5"', price: 39, meshCount: 13 },
-  '8x10': { width: 8, height: 10, name: 'Standard', dimensions: '8" × 10"', price: 65, meshCount: 13 },
-  '12x12': { width: 12, height: 12, name: 'Large', dimensions: '12" × 12"', price: 95, meshCount: 13 },
-  '14x18': { width: 14, height: 18, name: 'Premium', dimensions: '14" × 18"', price: 145, meshCount: 13 },
+  '14mesh': { width: 10, height: 10, name: '14 Mesh', dimensions: '10" × 10"', price: 75, meshCount: 14 },
+  '18mesh': { width: 10, height: 10, name: '18 Mesh', dimensions: '10" × 10"', price: 95, meshCount: 18 },
 };
 
 function App() {
@@ -37,7 +33,7 @@ function App() {
   const [imageFile, setImageFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [settings, setSettings] = useState({
-    canvasSize: '8x10',
+    canvasSize: '14mesh',
     colorCount: 16,
     showGrid: true,
   });
@@ -437,14 +433,39 @@ function App() {
 
   return (
     <div className="app">
+      {/* Hidden file input - accessible from all steps */}
+      <input
+        id="file-upload"
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
+        onChange={handleImageUpload}
+        style={{ display: 'none' }}
+      />
+
       {/* Header */}
       <header className="header">
         <div className="header-content">
           <a href={CONFIG.shopifyStoreUrl} className="logo">
-            Modern Mesh Co.
+            <svg className="logo-icon" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+              {/* M shape with mesh grid */}
+              <path d="M8 52V18L30 36L52 18V52" stroke="currentColor" strokeWidth="4" fill="none"/>
+              <path d="M8 18L20 28L30 20L40 28L52 18" stroke="currentColor" strokeWidth="4" fill="none"/>
+              {/* Mesh grid in center */}
+              <g stroke="currentColor" strokeWidth="0.5" opacity="0.7">
+                {[0,1,2,3,4,5,6,7,8,9,10].map(i => (
+                  <line key={`h${i}`} x1="18" y1={32 + i*2} x2="42" y2={32 + i*2}/>
+                ))}
+                {[0,1,2,3,4,5,6,7,8,9,10,11,12].map(i => (
+                  <line key={`v${i}`} x1={18 + i*2} y1="32" x2={18 + i*2} y2="52"/>
+                ))}
+              </g>
+            </svg>
+            <span className="logo-text">MODERN MESH</span>
           </a>
           <nav className="nav">
-            <a href={CONFIG.shopifyStoreUrl}>← Back to Store</a>
+            <a href={CONFIG.shopifyStoreUrl}>Back to Store</a>
           </nav>
         </div>
       </header>
@@ -478,20 +499,13 @@ function App() {
                 with color-matched DMC threads.
               </p>
               
-              <label className="upload-area" onClick={() => fileInputRef.current?.click()}>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  style={{ display: 'none' }}
-                />
+              <label className="upload-area" htmlFor="file-upload">
                 <div className="upload-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                     <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
                 </div>
-                <span className="upload-text">Click to upload your photo</span>
+                <span className="upload-text">Tap to upload your photo</span>
                 <span className="upload-hint">JPEG, PNG, or HEIC up to 20MB</span>
               </label>
 
@@ -526,12 +540,9 @@ function App() {
                   <h3>Your Photo</h3>
                   <div className="original-image-container">
                     <img src={image} alt="Original" className="original-image" />
-                    <button 
-                      className="change-photo-btn"
-                      onClick={() => fileInputRef.current?.click()}
-                    >
+                    <label htmlFor="file-upload" className="change-photo-btn">
                       Change Photo
-                    </button>
+                    </label>
                   </div>
                 </div>
 

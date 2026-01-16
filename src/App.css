@@ -1,15 +1,15 @@
 /* Modern Mesh Co. Canvas Creator Styles */
 
 :root {
-  --sage: #4a5d52;
-  --sage-light: #6b7d72;
-  --sage-dark: #3a4d42;
-  --cream: #faf9f7;
-  --cream-dark: #f0ede8;
+  --burgundy: #722F37;
+  --burgundy-light: #8B4049;
+  --burgundy-dark: #5C262D;
+  --cream: #F5F5F0;
+  --cream-dark: #E8E8E3;
   --gold: #c9a86c;
   --gold-light: #dfc291;
-  --text: #2d3a35;
-  --text-light: #5a6660;
+  --text: #2d2d2d;
+  --text-light: #666666;
   --border: #e0ddd8;
   --white: #ffffff;
   --error: #c44;
@@ -53,11 +53,24 @@ body {
 }
 
 .logo {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--sage-dark);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
   text-decoration: none;
+  color: var(--burgundy);
+}
+
+.logo-icon {
+  width: 40px;
+  height: 40px;
+}
+
+.logo-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  color: var(--burgundy);
 }
 
 .nav a {
@@ -68,7 +81,7 @@ body {
 }
 
 .nav a:hover {
-  color: var(--sage);
+  color: var(--burgundy);
 }
 
 /* Progress Bar */
@@ -121,7 +134,7 @@ body {
 }
 
 .progress-step.active .step-number {
-  background: var(--sage);
+  background: var(--burgundy);
   color: var(--white);
 }
 
@@ -184,15 +197,15 @@ body {
 }
 
 .upload-area:hover {
-  border-color: var(--sage);
-  background: rgba(74, 93, 82, 0.03);
+  border-color: var(--burgundy);
+  background: rgba(114, 47, 55, 0.03);
 }
 
 .upload-icon {
   width: 80px;
   height: 80px;
   margin-bottom: 1.5rem;
-  color: var(--sage-light);
+  color: var(--burgundy-light);
 }
 
 .upload-icon svg {
@@ -349,12 +362,12 @@ body {
 }
 
 .size-option:hover {
-  border-color: var(--sage-light);
+  border-color: var(--burgundy-light);
 }
 
 .size-option.selected {
-  border-color: var(--sage);
-  background: rgba(74, 93, 82, 0.08);
+  border-color: var(--burgundy);
+  background: rgba(114, 47, 55, 0.08);
 }
 
 .size-name {
@@ -371,7 +384,7 @@ body {
 
 .size-price {
   font-weight: 600;
-  color: var(--sage);
+  color: var(--burgundy);
   font-size: 1rem;
 }
 
@@ -390,7 +403,7 @@ body {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: var(--sage);
+  background: var(--burgundy);
   cursor: pointer;
   transition: transform 0.2s;
 }
@@ -426,7 +439,7 @@ body {
 }
 
 .toggle.on {
-  background: var(--sage);
+  background: var(--burgundy);
 }
 
 .toggle-knob {
@@ -531,7 +544,7 @@ body {
   width: 40px;
   height: 40px;
   border: 3px solid var(--border);
-  border-top-color: var(--sage);
+  border-top-color: var(--burgundy);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -570,14 +583,14 @@ body {
 }
 
 .summary-total .price {
-  color: var(--sage);
+  color: var(--burgundy);
   font-size: 1.5rem;
 }
 
 .checkout-btn {
   width: 100%;
   padding: 1rem 2rem;
-  background: var(--sage);
+  background: var(--burgundy);
   color: var(--white);
   border: none;
   border-radius: 10px;
@@ -593,7 +606,7 @@ body {
 }
 
 .checkout-btn:hover:not(:disabled) {
-  background: var(--sage-dark);
+  background: var(--burgundy-dark);
   transform: translateY(-1px);
 }
 
@@ -625,8 +638,8 @@ body {
 }
 
 .download-btn:hover {
-  border-color: var(--sage);
-  color: var(--sage);
+  border-color: var(--burgundy);
+  color: var(--burgundy);
 }
 
 /* Footer */
