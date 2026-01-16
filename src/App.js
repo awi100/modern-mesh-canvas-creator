@@ -30,7 +30,6 @@ const CANVAS_SIZES = {
 function App() {
   const [step, setStep] = useState(1);
   const [image, setImage] = useState(null);
-  const [imageFile, setImageFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [settings, setSettings] = useState({
     canvasSize: '14mesh',
@@ -55,7 +54,6 @@ function App() {
         return;
       }
       
-      setImageFile(file);
       const reader = new FileReader();
       reader.onload = (event) => {
         setImage(event.target.result);
