@@ -33,8 +33,6 @@ function App() {
   const [preview, setPreview] = useState(null);
   const [settings, setSettings] = useState({
     canvasSize: '14mesh',
-    colorCount: 16,
-    showGrid: true,
   });
   const [processing, setProcessing] = useState(false);
   const [selectedColors, setSelectedColors] = useState([]);
@@ -202,35 +200,35 @@ function App() {
         pixels.push([imageData.data[i], imageData.data[i + 1], imageData.data[i + 2]]);
       }
 
-      // Quantize colors
-      const quantizedCentroids = kMeansQuantize(pixels, settings.colorCount);
-      
-      // Match to DMC colors
+      // Quantize colors - start with max 30, let algorithm find optimal
+      const maxColors = 30;
+      const quantizedCentroids = kMeansQuantize(pixels, maxColors);
+
+      // Match to DMC colors and remove duplicates
       const dmcPalette = quantizedCentroids.map(centroid => findNearestDMC(centroid, dmcColors));
       const uniquePalette = [...new Map(dmcPalette.map(c => [c.id, c])).values()];
       setSelectedColors(uniquePalette);
 
-      // Apply quantized colors to image data
+      // Apply DMC colors to image data - match each pixel to nearest DMC color
       for (let i = 0; i < pixels.length; i++) {
         let minDist = Infinity;
-        let nearestIdx = 0;
-        
-        for (let j = 0; j < quantizedCentroids.length; j++) {
-          const dist = 
-            Math.pow(pixels[i][0] - quantizedCentroids[j][0], 2) +
-            Math.pow(pixels[i][1] - quantizedCentroids[j][1], 2) +
-            Math.pow(pixels[i][2] - quantizedCentroids[j][2], 2);
-          
+        let nearestColor = uniquePalette[0];
+
+        for (const dmcColor of uniquePalette) {
+          const dist =
+            Math.pow(pixels[i][0] - dmcColor.rgb[0], 2) +
+            Math.pow(pixels[i][1] - dmcColor.rgb[1], 2) +
+            Math.pow(pixels[i][2] - dmcColor.rgb[2], 2);
+
           if (dist < minDist) {
             minDist = dist;
-            nearestIdx = j;
+            nearestColor = dmcColor;
           }
         }
-        
-        const dmcColor = dmcPalette[nearestIdx];
-        imageData.data[i * 4] = dmcColor.rgb[0];
-        imageData.data[i * 4 + 1] = dmcColor.rgb[1];
-        imageData.data[i * 4 + 2] = dmcColor.rgb[2];
+
+        imageData.data[i * 4] = nearestColor.rgb[0];
+        imageData.data[i * 4 + 1] = nearestColor.rgb[1];
+        imageData.data[i * 4 + 2] = nearestColor.rgb[2];
       }
       
       ctx.putImageData(imageData, 0, 0);
@@ -296,16 +294,14 @@ function App() {
           }
 
           // Grid lines
-          if (settings.showGrid) {
-            previewCtx.strokeStyle = 'rgba(0,0,0,0.1)';
-            previewCtx.lineWidth = 0.5;
-            previewCtx.strokeRect(
-              x * displayScale,
-              y * displayScale,
-              displayScale,
-              displayScale
-            );
-          }
+          previewCtx.strokeStyle = 'rgba(0,0,0,0.1)';
+          previewCtx.lineWidth = 0.5;
+          previewCtx.strokeRect(
+            x * displayScale,
+            y * displayScale,
+            displayScale,
+            displayScale
+          );
         }
       }
 
@@ -560,34 +556,6 @@ function App() {
                       </button>
                     ))}
                   </div>
-                </div>
-
-                {/* Color Count */}
-                <div className="control-group">
-                  <h3>Thread Colors: {settings.colorCount}</h3>
-                  <input
-                    type="range"
-                    min="8"
-                    max="32"
-                    value={settings.colorCount}
-                    onChange={(e) => setSettings(s => ({ ...s, colorCount: parseInt(e.target.value) }))}
-                    className="color-slider"
-                  />
-                  <div className="slider-labels">
-                    <span>Simpler</span>
-                    <span>More Detail</span>
-                  </div>
-                </div>
-
-                {/* Grid Toggle */}
-                <div className="control-group toggle-group">
-                  <span>Show Stitch Grid</span>
-                  <button
-                    className={`toggle ${settings.showGrid ? 'on' : ''}`}
-                    onClick={() => setSettings(s => ({ ...s, showGrid: !s.showGrid }))}
-                  >
-                    <span className="toggle-knob" />
-                  </button>
                 </div>
 
                 {/* Thread Colors */}
