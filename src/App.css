@@ -642,6 +642,41 @@ body {
   color: var(--burgundy);
 }
 
+/* Download Buttons Container */
+.download-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+/* Pattern Info */
+.pattern-info {
+  background: var(--cream);
+  border-radius: 8px;
+  padding: 0.75rem;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+.info-row:not(:last-child) {
+  border-bottom: 1px solid var(--border);
+}
+
+.info-row span:first-child {
+  color: var(--text-light);
+}
+
+.info-row span:last-child {
+  font-weight: 500;
+  color: var(--text);
+}
+
 /* Footer */
 .footer {
   background: var(--white);
